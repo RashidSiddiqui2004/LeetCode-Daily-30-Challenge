@@ -1,0 +1,44 @@
+class Solution {
+
+    int sz;
+    string getBinary(int n) {
+        string curr = ""; 
+        int currnum = n; 
+        while (currnum) {
+            int dig = currnum % 2;
+            curr += '0' + dig;
+            currnum/=2; 
+        }
+        reverse(curr.begin(),curr.end());
+        // append leading 0s
+        int currsz = curr.size();
+        for(int i=0;i<sz-currsz;i++){
+            curr = '0' + curr;
+        }
+        return curr;
+    }
+
+public:
+    string findDifferentBinaryString(vector<string>& nums) {
+        // n length ki saari binary strings generate kro
+        int n = nums[0].size();
+        sz = n;
+
+        unordered_set<string> st(nums.begin(), nums.end());
+
+        for(auto i: nums){
+            st.insert(i);
+        }
+ 
+        for(int i=0;i<=20;i++){
+            string curr = "";
+            // n len binary representation of i
+            auto s = getBinary(i); 
+            if(!st.count(s)){
+                return s;
+            }
+        }
+
+        return "";
+    }
+};
