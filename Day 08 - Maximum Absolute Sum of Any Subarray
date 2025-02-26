@@ -1,0 +1,29 @@
+class Solution {
+
+    int maxSubarraySum(vector<int> &v){
+        int maxSum = 0, currSum = 0;
+
+        for(auto i: v){
+            if(currSum < 0){
+                currSum = 0;
+            }
+            currSum += i;
+            maxSum = max(maxSum, currSum);
+        }
+
+        return maxSum;
+    }
+
+public:
+    int maxAbsoluteSum(vector<int>& nums) { 
+        vector<int> inv;
+
+        for(auto elem : nums){
+            inv.push_back(-elem);
+        }
+
+        int maxAbsoluteSum = max(maxSubarraySum(nums), maxSubarraySum(inv));
+
+        return maxAbsoluteSum;
+    }
+};
