@@ -1,0 +1,54 @@
+class Solution {
+public:
+    using ll=long long;
+    int solve(vector<int>& arr,int pos,ll penult,ll ult){
+        int n=arr.size();
+        if(pos==n){
+            return 0;
+        }
+        int ans=0;
+        if(penult==-1){
+            ans=max(1+solve(arr,pos+1,arr[pos],penult),ans);
+        }
+        else if(ult==-1){
+            ans=max(1+solve(arr,pos+1,penult,arr[pos]),ans);
+        }
+        else if(arr[pos]==penult+ult){
+            ans=max(1+solve(arr,pos+1,ult,arr[pos]),ans);
+        }
+
+        ans=max(ans,solve(arr,pos+1,penult,ult));
+        return ans;
+    }
+    int lenLongestFibSubseqBF(vector<int>& arr) {
+        ll penult=-1, ult=-1;
+        return solve(arr,0,penult,ult);
+    }
+
+    int lenLongestFibSubseq(vector<int>& arr) {
+        int n=arr.size();
+        vector<vector<ll>> dp(n,vector<ll> (n,0));
+        ll maxlen = 0; 
+
+        for(int i=2;i<n;i++){
+            int l=0,h=i-1;
+            ll currmax=0,currval=-1;
+            while(l<h){
+                ll sum = arr[l]+arr[h]; 
+                if(sum==arr[i]){  
+                    dp[h][i]=dp[l][h]+1;
+                    maxlen=max(maxlen,dp[h][i]);  
+                    ++l;--h;
+                }
+                else if(sum < arr[i]){
+                    ++l;
+                }
+                else{   
+                    --h;
+                }
+            } 
+        }
+
+        return maxlen==0 ? 0 : maxlen+2;
+    }
+};
