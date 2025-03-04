@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
+        vector<int> less, great;
+        int equal = 0;
+
+        for(auto i : nums){
+            if(i < pivot){
+                less.push_back(i);
+            }
+            else if(i > pivot){
+                great.push_back(i);
+            }
+            else{
+                equal++;
+            }
+        }
+
+        int i = 0;
+
+        for(auto e : less)
+        {
+            nums[i++] = e;
+        }
+
+        for(int t=0;t<equal;t++)
+        {
+            nums[i++] = pivot;
+        }
+
+        for(auto e: great)
+        {
+            nums[i++] = e;
+        }
+
+        return nums;
+    }
+};
