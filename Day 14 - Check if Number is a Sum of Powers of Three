@@ -1,0 +1,32 @@
+class Solution {
+    bool solve(int mask, int n, int curr, int pos){
+
+        if(n==curr){
+            return true;
+        }
+
+        if((curr > n) || (pos==15)){
+            return false;
+        } 
+
+        bool ans = solve(mask, n, curr, pos + 1);
+ 
+        if((mask & (1<<pos)) == 0){
+            ans = ans or solve(mask | (1<<pos), n, curr + pow(3, pos), pos + 1); 
+        }
+         
+        return ans;
+    }
+ 
+public:
+       bool checkPowersOfThree(int n) {
+        while (n > 0) {
+            if (n % 3 == 2) {
+                return false;
+            }
+            n /= 3;
+        }
+        return true;
+    }
+
+};
