@@ -1,0 +1,46 @@
+
+#define N 1e6 +5
+
+class Solution {
+
+public:
+    vector<int> closestPrimes(int left, int right) {
+        
+        vector<int> primes(N,1);
+
+        primes[1] = 0;
+        primes[0] = 0;
+
+        for(int i=2;i<=sqrt(right+2);i++){
+            for(int j=i*i;j<=right+2;j+=i){
+                primes[j]=0;
+            }
+        }
+
+        vector<int> ans = {-1,-1};
+
+        int x=-1;
+        int currdiff;
+        int minDiff = N;
+
+        for(int i=left;i<=right;i++){
+            if(primes[i]==1){
+                if(x==-1){
+                    x=i;
+                }
+                else{
+                    currdiff = i-x;
+                   
+                    if(minDiff > currdiff){
+                        minDiff = currdiff;
+                        ans = {x,i};
+                    }
+
+                    x=i;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
