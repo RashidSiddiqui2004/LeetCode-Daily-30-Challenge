@@ -1,0 +1,38 @@
+class Solution {
+
+public:
+    int numberOfAlternatingGroups(vector<int>& arr, int k) {
+        int n = arr.size();
+        int count = 0, len= 1;
+        int last = arr[0];
+
+        for(int i=1;i<n;i++){
+            if(arr[i]!=last){
+                len++;
+            }
+            else{
+                len=1;
+            }
+            if(len>=k){
+                count++;
+            } 
+            last=arr[i];
+        }
+
+        for(int i=0;i<k-1;i++){
+            if(arr[i]!=last){
+                len++;
+            }
+            else{
+                len=1;
+            }
+            if(len>=k){
+                count++;
+            } 
+            last=arr[i];
+        }
+
+         
+        return count;
+    }
+};
