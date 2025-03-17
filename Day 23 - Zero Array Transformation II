@@ -1,0 +1,45 @@
+class Solution {
+
+    bool isPossibleTomake0(vector<int>& v, int n,
+        vector<vector<int>>& queries, int k) {
+
+        vector<int> op(n + 1, 0);
+        
+        for (int i=0;i<k;i++) {
+            op[queries[i][0]]+=queries[i][2];
+            op[queries[i][1] + 1]-=queries[i][2];
+        }
+
+        for (int i = 1; i <= n; i++) {
+            op[i] += op[i - 1];
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (v[i] > op[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+public:
+    int minZeroArray(vector<int>& nums, vector<vector<int>>& queries) {
+        int n = nums.size();
+        int low=0, high=queries.size();
+        int mid, ans=-1;
+
+        while(low<=high){
+            mid = (low+ high)/2;
+            if(isPossibleTomake0(nums, n, queries, mid)){
+                ans = mid;
+                high= mid - 1;
+            }
+            else{
+                low = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
