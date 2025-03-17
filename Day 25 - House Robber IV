@@ -1,0 +1,38 @@
+class Solution {
+public:
+using ll = long long;
+
+    int minCapability(vector<int>& nums, int k) {
+        ll l=0, h=INT_MAX, mid, ans;
+
+         int n = nums.size();
+
+        while(l<=h){
+
+            mid = (l+h)/2;
+            int i=0;
+
+            ll robbed = 0;
+
+            while(i<n and robbed<k){
+                if(nums[i]<=mid){
+                    robbed++;
+                    i+=2;
+                }
+                else{
+                    i++;
+                }
+            }
+
+            if(robbed>=k){
+                ans = mid;
+                h = mid-1;
+            }
+            else{
+                l = mid+1;
+            }
+        }
+
+        return ans;
+    }
+};
