@@ -1,0 +1,35 @@
+class Solution {
+public:
+    using ll = long long;
+    ll repairCars(vector<int>& ranks, int cars) {
+
+        sort(ranks.begin(), ranks.end());
+        int lowest=ranks[0];
+
+        // n => r*n^2
+
+        ll low = 0, high = LLONG_MAX, mid, ans; 
+
+        while(low<=high){
+            mid = (low+high)/2;
+            ll curr = 0;
+            for(auto i: ranks){
+                long long num_Cars = pow(mid/i,0.5);
+                curr+=num_Cars;
+                if(curr>=cars){
+                    break;
+                }
+            }
+            bool isposs = (curr >= cars);
+            // cout<<mid<<" "<<curr<<" "<<isposs<<endl;
+            if(isposs){
+                ans=mid;
+                high=mid-1; 
+            }else{
+                low=mid+1;
+            }
+        }
+
+        return ans;
+    }
+};
