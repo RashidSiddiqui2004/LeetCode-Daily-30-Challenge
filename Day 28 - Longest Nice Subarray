@@ -1,0 +1,86 @@
+Brute force approach - Checking all subarrays
+
+class Solution {
+public:
+    int longestNiceSubarray(vector<int>& nums) {
+        int n = nums.size(), maxLength = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                bool isNice = true;
+                for (int k = i; k < j; k++) {
+                    for (int l = k + 1; l <= j; l++) {
+                        if ((nums[k] & nums[l]) != 0) {
+                            isNice = false;
+                            break;
+                        }
+                    }
+                    if (!isNice)
+                        break;
+                }
+                if (isNice)
+                    maxLength = max(maxLength, j - i + 1);
+            }
+        }
+        return maxLength;
+    }
+};
+
+Semi - Optimized Approach - 2 Pointer Approach
+
+class Solution {
+public:
+    int longestNiceSubarray(vector<int>& nums) {
+        int ans = 1; 
+        int l=0, n = nums.size();
+        vector<int> fr(32, 0);
+
+        for(int r=0;r<n;r++){
+            
+            for(int i=0;i<32;i++){
+                    if(((1<<i) & nums[r]) != 0){
+                        fr[i]++;
+                    }
+            }
+
+            while(true){
+                bool chk = false;
+                for(int i=0; i<32 ;i++){ 
+                    if(fr[i] > 1){
+                        chk=true;
+                    }
+                } 
+                if(!chk){
+                    break;
+                }
+                for(int i=0; i<32 ;i++){
+                    if(((1<<i) & nums[l]) != 0){
+                        fr[i]--; 
+                    } 
+                } 
+                l++;
+            }
+
+            ans = max(ans, r-l+1);  
+        }
+
+        return ans;
+    }
+};
+
+ Optimized Approach - 2 Pointers Optimized
+
+class Solution {
+public:
+    int longestNiceSubarray(vector<int>& nums) {
+        int ans = 1, l = 0, n = nums.size(), bitmask = 0;
+        for (int r = 0; r < n; r++) {
+            while ((bitmask & nums[r]) != 0) {
+                bitmask ^= nums[l];
+                l++;
+            }
+            bitmask |= nums[r];
+            ans = max(ans, r - l + 1);
+        }
+        return ans;
+    }
+};
