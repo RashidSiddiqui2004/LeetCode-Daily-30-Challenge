@@ -1,0 +1,101 @@
+
+using pii=pair<int,int>;
+using ll=long long;
+
+class UnionFind {
+public:
+   
+    UnionFind(int n) {
+        rank = vector<int>(n, 1);
+        f.resize(n);
+        for (int i = 0; i < n; ++i) f[i] = i;
+    }
+    
+    int Find(int x) {
+        if (x == f[x]) return x;
+        else return f[x] = Find(f[x]);
+    }
+    
+    void Union(int x, int y) {
+        int fx = Find(x), fy = Find(y);
+        if (fx == fy) return;
+        if (rank[fx] > rank[fy]) swap(fx, fy);
+        f[fx] = fy;
+        if (rank[fx] == rank[fy]) rank[fy]++;
+    }
+    
+private:
+    vector<int> f, rank;
+};
+
+class Solution {
+    vector<int> vis;
+    void bfs(const vector<vector<pii>> &adj,int node,int &andValue){
+        queue<int> q;
+        q.push(node);
+
+        while(!q.empty()){
+            auto front=q.front();
+            q.pop();
+
+            if(vis[front]){
+                continue;
+            }
+
+            vis[front]=true;
+
+            for(auto i: adj[front]){
+                if(andValue==-1){
+                    andValue=i.second;
+                }
+                else{
+                    andValue = andValue & i.second;
+                }
+                q.push(i.first);
+            }
+        }
+    }
+
+public:
+    vector<int> minimumCost(int n, vector<vector<int>>& edges, vector<vector<int>>& query) {
+        UnionFind uf = UnionFind(n);
+
+        vector<vector<pii>> adj(n);
+        for(auto i: edges){
+            uf.Union(i[0],i[1]);
+            adj[i[0]].push_back({i[1],i[2]});
+            adj[i[1]].push_back({i[0],i[2]});
+        }
+
+        vector<int> ans;
+
+        vector<int> groupID(n);
+        map<int,vector<int>> groups;
+
+        for(int i=0;i<n;i++){ 
+            int id= uf.Find(i);
+            groups[id].push_back(i);
+            groupID[i]=id;
+        }
+        map<int,int> value;
+        vis.assign(n,0);
+
+        for(auto i: groups){
+            auto nodes = i.second;
+            int andValue = -1;
+            bfs(adj,nodes[0],andValue);
+            value[i.first]=andValue;
+        }
+ 
+        for(auto i: query){
+            if(groupID[i[0]]!=groupID[i[1]]){
+                ans.push_back(-1);
+            }
+            else{
+                ans.push_back(value[groupID[i[0]]]);
+            }
+        }
+
+        return ans;
+    }
+};
